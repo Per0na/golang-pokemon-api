@@ -1,0 +1,5 @@
+### Test Pokemon API
+
+### Get all pokemon
+GET http://localhost:8080/v1/pokemons
+Accept: application/json
