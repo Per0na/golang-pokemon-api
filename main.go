@@ -57,6 +57,26 @@ func main() {
 		json.NewEncoder(w).Encode(pokemon)
 	})
 
+	// Create a new pokemon
+	server.HandleFunc("POST /v1/pokemons", func(w http.ResponseWriter, r *http.Request) {
+		var pokemon models.Pokemon
+		err := json.NewDecoder(r.Body).Decode(&pokemon)
+		if err != nil {
+			http.Error(w, "Invalid request body", http.StatusBadRequest)
+			return
+		}
+
+		// Set the id of the new pokemon
+		pokemon.Id = len(pokemons) + 1
+
+		// Add the new pokemon to the array
+		pokemons = append(pokemons, pokemon)
+
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusCreated)
+		json.NewEncoder(w).Encode(pokemon)
+	})
+
 	// Run the server
 	fmt.Println("Server running at port 8080")
 	http.ListenAndServe(":8080", server)

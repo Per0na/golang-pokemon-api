@@ -1,5 +1,3 @@
-### Test Pokemon API
-
 ### Get all pokemon
 GET http://localhost:8080/v1/pokemons
 Accept: application/json
@@ -7,3 +5,13 @@ Accept: application/json
 ### Get pokemon by id
 GET http://localhost:8080/v1/pokemons/1
 Accept: application/json
+
+### Create pokemon
+POST http://localhost:8080/v1/pokemons
+Content-Type: application/json
+
+{
+  "name": "Charizard",
+  "type": "Fire",
+  "level": 36
+}
