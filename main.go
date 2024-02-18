@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -22,6 +23,7 @@ func main() {
 
 	// Find all pokemons from the pokemon array
 	server.HandleFunc("GET /v1/pokemons", func(w http.ResponseWriter, r *http.Request) {
+		log.Println("GET /v1/pokemons")
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(pokemons)
@@ -36,6 +38,8 @@ func main() {
 			http.Error(w, "Invalid id", http.StatusBadRequest)
 			return
 		}
+
+		log.Printf("GET /v1/pokemons/%d", id)
 
 		// Find the pokemon by id
 		var pokemon models.Pokemon
@@ -59,6 +63,7 @@ func main() {
 
 	// Create a new pokemon
 	server.HandleFunc("POST /v1/pokemons", func(w http.ResponseWriter, r *http.Request) {
+		log.Println("POST /v1/pokemons")
 		var pokemon models.Pokemon
 		err := json.NewDecoder(r.Body).Decode(&pokemon)
 		if err != nil {
@@ -86,6 +91,8 @@ func main() {
 			http.Error(w, "Invalid id", http.StatusBadRequest)
 			return
 		}
+
+		log.Printf("PUT /v1/pokemons/%d", id)
 
 		var pokemon models.Pokemon
 		err = json.NewDecoder(r.Body).Decode(&pokemon)
@@ -119,6 +126,8 @@ func main() {
 			return
 		}
 
+		log.Printf("DELETE /v1/pokemons/%d", id)
+
 		// Find the pokemon by id
 		for i, p := range pokemons {
 			if p.Id == id {
@@ -134,5 +143,5 @@ func main() {
 
 	// Run the server
 	fmt.Println("Server running at port 8080")
-	http.ListenAndServe(":8080", server)
+	log.Fatal(http.ListenAndServe(":8080", server))
 }
