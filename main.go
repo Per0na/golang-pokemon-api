@@ -109,6 +109,29 @@ func main() {
 		json.NewEncoder(w).Encode(pokemon)
 	})
 
+	// Delete a pokemon by id
+	server.HandleFunc("DELETE /v1/pokemons/{id}", func(w http.ResponseWriter, r *http.Request) {
+		idStr := r.PathValue("id")
+		// Convert the id to int
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			http.Error(w, "Invalid id", http.StatusBadRequest)
+			return
+		}
+
+		// Find the pokemon by id
+		for i, p := range pokemons {
+			if p.Id == id {
+				// Remove the pokemon from the array
+				pokemons = append(pokemons[:i], pokemons[i+1:]...)
+				break
+			}
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusNoContent)
+	})
+
 	// Run the server
 	fmt.Println("Server running at port 8080")
 	http.ListenAndServe(":8080", server)

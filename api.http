@@ -25,3 +25,7 @@ Content-Type: application/json
   "type": "Fire",
   "level": 20
 }
+
+### Delete pokemon
+DELETE http://localhost:8080/v1/pokemons/5
+Accept: application/json
