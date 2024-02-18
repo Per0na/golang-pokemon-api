@@ -15,3 +15,13 @@ Content-Type: application/json
   "type": "Fire",
   "level": 36
 }
+
+### Update pokemon
+PUT http://localhost:8080/v1/pokemons/5
+Content-Type: application/json
+
+{
+  "name": "Charizard",
+  "type": "Fire",
+  "level": 20
+}

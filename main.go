@@ -77,6 +77,38 @@ func main() {
 		json.NewEncoder(w).Encode(pokemon)
 	})
 
+	// Update a pokemon by id
+	server.HandleFunc("PUT /v1/pokemons/{id}", func(w http.ResponseWriter, r *http.Request) {
+		idStr := r.PathValue("id")
+		// Convert the id to int
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			http.Error(w, "Invalid id", http.StatusBadRequest)
+			return
+		}
+
+		var pokemon models.Pokemon
+		err = json.NewDecoder(r.Body).Decode(&pokemon)
+		if err != nil {
+			http.Error(w, "Invalid request body", http.StatusBadRequest)
+			return
+		}
+
+		// Find the pokemon by id
+		for i, p := range pokemons {
+			if p.Id == id {
+				// Update the pokemon
+				pokemon.Id = id
+				pokemons[i] = pokemon
+				break
+			}
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(pokemon)
+	})
+
 	// Run the server
 	fmt.Println("Server running at port 8080")
 	http.ListenAndServe(":8080", server)
