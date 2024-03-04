@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 	"strconv"
@@ -18,8 +19,19 @@ var pokemons = []models.Pokemon{
 	{Id: 4, Name: "Squirtle", Type: "Water", Level: 1},
 }
 
+const templateFolder = "templates"
+
 func main() {
 	server := http.NewServeMux()
+
+	// Load templates
+	var templates = template.Must(template.ParseGlob(templateFolder + "/*.tmpl"))
+
+	// Home page
+	server.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		//log.Println("GET /")
+		templates.ExecuteTemplate(w, "home.tmpl", nil)
+	})
 
 	// Find all pokemons from the pokemon array
 	server.HandleFunc("GET /v1/pokemons", func(w http.ResponseWriter, r *http.Request) {
