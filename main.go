@@ -29,7 +29,7 @@ func main() {
 
 	// Home page
 	server.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		//log.Println("GET /")
+		log.Println("GET /")
 		templates.ExecuteTemplate(w, "home.tmpl", nil)
 	})
 
@@ -155,5 +155,5 @@ func main() {
 
 	// Run the server
 	fmt.Println("Server running at port 8080")
-	log.Fatal(http.ListenAndServe(":8080", server))
+	log.Fatal(http.ListenAndServe("127.0.0.1:8080", server))
 }
